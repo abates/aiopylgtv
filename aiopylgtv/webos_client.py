@@ -557,6 +557,9 @@ class WebOsClient:
     async def set_power_state(self, payload):
         self._power_state = payload
 
+        if "state" in self._power_state and self._power_state["state"] == "Suspend":
+            asyncio.create_task(self.disconnect())
+
         if self.state_update_callbacks and self.doStateUpdate:
             await self.do_state_update_callbacks()
 
